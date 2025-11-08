@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VideoCutDigitalInternet_CN多功能网站</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            background-attachment: fixed;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 30px;
+        }
+        
+        .location-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-width: 300px;
+        }
+        
+        .location-guess {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .location-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .location i {
+            margin-right: 10px;
+            color: #4dabf7;
+        }
+        
+        .time-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        
+        .time {
+            font-size: 2rem;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px 25px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 5px;
+        }
+        
+        .date {
+            font-size: 1.2rem;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin: 25px 0;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .intro {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+        
+        .search-container {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+        
+        .search-engine-toggle {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px 15px;
+            background: rgba(30, 30, 40, 0.8);
+            border-radius: 50px;
+            width: fit-content;
+            margin-left: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .search-engine-toggle input {
+            margin-right: 8px;
+        }
+        
+        .search-engine-toggle label {
+            font-size: 0.9rem;
+            color: #e0e0e0;
+            cursor: pointer;
+        }
+        
+        .search-box {
+            display: flex;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .search-label {
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            color: #ccc;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 12px 20px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .search-input::placeholder {
+            color: #aaa;
+        }
+        
+        .search-btn {
+            background: #4dabf7;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            padding: 12px 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .search-btn:hover {
+            background: #3b99e0;
+            transform: scale(1.05);
+        }
+        
+        .search-tip {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        .search-error {
+            text-align: center;
+            margin-top: 10px;
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        /* 其余样式保持不变... */
+        
+        /* 选项卡样式 */
+        .tab-container {
+            display: flex;
+            margin-bottom: 15px;
+            background: rgba(30, 30, 40, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .tab.active {
+            background: rgba(70, 70, 100, 0.9);
+            box-shadow: 0 0 15px rgba(100, 100, 255, 0.5);
+        }
+        
+        .tab:hover:not(.active) {
+            background: rgba(50, 50, 70, 0.8);
+        }
+        
+        /* 筛选器开关 */
+        .filter-toggle-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .filter-toggle {
+            background: rgba(30, 30, 40, 0.8);
+            border: none;
+            border-radius: 50px;
+            color: #fff;
+            padding: 10px 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .filter-toggle:hover {
+            background: rgba(50, 50, 70, 0.8);
+        }
+        
+        .filter-toggle.active {
+            background: rgba(70, 70, 100, 0.9);
+            box-shadow: 0 0 15px rgba(100, 100, 255, 0.5);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* 筛选器样式 */
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+        }
+        
+        .filter-checkbox {
+            display: none;
+        }
+        
+        .filter-label {
+            padding: 10px 20px;
+            background: rgba(30, 30, 40, 0.8);
+            border-radius: 50px;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .filter-checkbox:checked + .filter-label {
+            background: rgba(70, 70, 100, 0.9);
+            box-shadow: 0 0 15px rgba(100, 100, 255, 0.5);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .filter-label:hover {
+            background: rgba(50, 50, 70, 0.8);
+        }
+        
+        /* 网站网格样式 */
+        .websites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .website-card {
+            background: rgba(30, 30, 40, 0.8);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+        }
+        
+        .website-card:hover, .website-card.selected {
+            transform: translateY(-5px);
+            background: rgba(40, 40, 60, 0.9);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .website-card.selected {
+            background: rgba(60, 60, 100, 0.9);
+            box-shadow: 0 0 20px rgba(100, 100, 255, 0.7);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .website-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .website-info {
+            flex: 1;
+        }
+        
+        .website-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .website-url {
+            font-size: 0.9rem;
+            color: #aaa;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        /* 下载详情页样式 */
+        .download-detail {
+            display: none;
+            background: rgba(30, 30, 40, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .back-btn {
+            background: rgba(70, 70, 100, 0.8);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(90, 90, 120, 0.9);
+        }
+        
+        .download-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .download-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 2.5rem;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .download-title {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .download-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .download-option {
+            background: rgba(40, 40, 60, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .download-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .download-option i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #4dabf7;
+        }
+        
+        .download-option h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        
+        .download-option p {
+            color: #aaa;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .download-btn {
+            background: #4dabf7;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            width: 100%;
+        }
+        
+        .download-btn:hover {
+            background: #3b99e0;
+            transform: scale(1.05);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        .keyboard-hint {
+            text-align: center;
+            margin-top: 10px;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .websites-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .time {
+                font-size: 1.5rem;
+            }
+            
+            .date {
+                font-size: 1rem;
+            }
+            
+            .search-label {
+                display: none;
+            }
+            
+            .location-container {
+                min-width: 250px;
+            }
+            
+            .download-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .download-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .download-icon {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="location-container">
+                <div class="location-guess" id="location-guess"></div>
+                <div class="location-text" id="location-text">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span id="location-display">我们正在申请访问您的IP地址</span>
+                </div>
+            </div>
+            <div class="time-container">
+                <div class="time" id="current-time">00:00:00</div>
+                <div class="date" id="current-date">2024年11月17日 星期日</div>
+            </div>
+        </header>
+        
+        <h1>VideoCutDigitalInternet_CN多功能网站</h1>
+        
+        <div class="intro">
+            欢迎使用多功能导航网站！这里汇集了各类常用网站，点击即可快速访问。
+        </div>
+        
+        <div class="search-container">
+            <!-- 新增搜索引擎开关 -->
+            <div class="search-engine-toggle">
+                <input type="checkbox" id="vcdi-search-toggle">
+                <label for="vcdi-search-toggle">启用VCDI搜索引擎</label>
+            </div>
+            
+            <div class="search-box">
+                <div class="search-label" id="search-label">请输入您需要导航的地点或路径</div>
+                <input type="text" class="search-input" id="search-input" placeholder="例如：北京市朝阳区 或 www.example.com">
+                <button class="search-btn" id="search-btn">导航</button>
+            </div>
+            <div class="search-tip" id="search-tip">支持地点导航和网站访问，网站默认使用HTTPS安全协议</div>
+            <div class="search-error" id="search-error">该路径不存在，请换一个试试</div>
+        </div>
+        
+        <!-- 选项卡 -->
+        <div class="tab-container">
+            <div class="tab active" id="websites-tab">全部网站</div>
+            <div class="tab" id="downloads-tab">下载链接</div>
+        </div>
+        
+        <!-- 筛选器开关 -->
+        <div class="filter-toggle-container">
+            <button class="filter-toggle active" id="filter-toggle">已开启筛选器</button>
+        </div>
+        
+        <!-- 网站导航区域 -->
+        <div id="websites-section">
+            <!-- 筛选器 -->
+            <div class="filter-container" id="websites-filters">
+                <input type="checkbox" id="filter-ai" class="filter-checkbox" data-category="ai">
+                <label for="filter-ai" class="filter-label">AI工具</label>
+                
+                <input type="checkbox" id="filter-video" class="filter-checkbox" data-category="video">
+                <label for="filter-video" class="filter-label">视频平台</label>
+                
+                <input type="checkbox" id="filter-social" class="filter-checkbox" data-category="social">
+                <label for="filter-social" class="filter-label">社交媒体</label>
+                
+                <input type="checkbox" id="filter-cloud" class="filter-checkbox" data-category="cloud">
+                <label for="filter-cloud" class="filter-label">网盘存储</label>
+                
+                <input type="checkbox" id="filter-download" class="filter-checkbox" data-category="download">
+                <label for="filter-download" class="filter-label">下载工具</label>
+                
+                <input type="checkbox" id="filter-search" class="filter-checkbox" data-category="search">
+                <label for="filter-search" class="filter-label">搜索引擎</label>
+                
+                <input type="checkbox" id="filter-tools" class="filter-checkbox" data-category="tools">
+                <label for="filter-tools" class="filter-label">实用工具</label>
+                
+                <input type="checkbox" id="filter-shopping" class="filter-checkbox" data-category="shopping">
+                <label for="filter-shopping" class="filter-label">购物平台</label>
+            </div>
+            
+            <!-- 网站网格 -->
+            <div class="websites-grid" id="websites-container">
+                <!-- 网站卡片将通过JavaScript动态生成 -->
+            </div>
+            
+            <div class="keyboard-hint">提示：使用方向键导航，Enter键选择</div>
+        </div>
+        
+        <!-- 下载链接区域 -->
+        <div id="downloads-section" style="display: none;">
+            <!-- 筛选器 -->
+            <div class="filter-container" id="downloads-filters">
+                <input type="checkbox" id="download-filter-ai" class="filter-checkbox" data-category="ai">
+                <label for="download-filter-ai" class="filter-label">AI工具</label>
+                
+                <input type="checkbox" id="download-filter-video" class="filter-checkbox" data-category="video">
+                <label for="download-filter-video" class="filter-label">视频平台</label>
+                
+                <input type="checkbox" id="download-filter-social" class="filter-checkbox" data-category="social">
+                <label for="download-filter-social" class="filter-label">社交媒体</label>
+                
+                <input type="checkbox" id="download-filter-cloud" class="filter-checkbox" data-category="cloud">
+                <label for="download-filter-cloud" class="filter-label">网盘存储</label>
+                
+                <input type="checkbox" id="download-filter-download" class="filter-checkbox" data-category="download">
+                <label for="download-filter-download" class="filter-label">下载工具</label>
+                
+                <input type="checkbox" id="download-filter-search" class="filter-checkbox" data-category="search">
+                <label for="download-filter-search" class="filter-label">搜索引擎</label>
+                
+                <input type="checkbox" id="download-filter-tools" class="filter-checkbox" data-category="tools">
+                <label for="download-filter-tools" class="filter-label">实用工具</label>
+                
+                <input type="checkbox" id="download-filter-shopping" class="filter-checkbox" data-category="shopping">
+                <label for="download-filter-shopping" class="filter-label">购物平台</label>
+            </div>
+            
+            <!-- 下载链接网格 -->
+            <div class="websites-grid" id="downloads-container">
+                <!-- 下载卡片将通过JavaScript动态生成 -->
+            </div>
+            
+            <div class="keyboard-hint">提示：使用方向键导航，Enter键选择</div>
+            
+            <!-- 下载详情页 -->
+            <div class="download-detail" id="download-detail">
+                <button class="back-btn" id="back-btn">
+                    <i class="fas fa-arrow-left"></i> 返回
+                </button>
+                
+                <div class="download-header">
+                    <div class="download-icon" id="detail-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="download-title" id="detail-title">应用名称</div>
+                </div>
+                
+                <div class="download-options">
+                    <div class="download-option">
+                        <i class="fab fa-windows"></i>
+                        <h3>Windows 下载</h3>
+                        <p>适用于 Windows 10/11 的桌面版本</p>
+                        <button class="download-btn" id="windows-download">下载</button>
+                    </div>
+                    
+                    <div class="download-option">
+                        <i class="fab fa-android"></i>
+                        <h3>Android 下载</h3>
+                        <p>适用于 Android 设备的移动版本</p>
+                        <button class="download-btn" id="android-download">下载</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>VideoCutDigitalInternet_CN &copy; 2024 - 多功能导航网站</p>
+        </footer>
+    </div>
+
+    <script>
+        // 实时时间更新
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('zh-CN');
+            document.getElementById('current-time').textContent = timeString;
+            
+            // 更新日期
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+            const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+            const weekday = weekdays[now.getDay()];
+            
+            document.getElementById('current-date').textContent = `${year}年${month}月${day}日 ${weekday}`;
+        }
+        
+        // 初始调用并设置定时器
+        updateTime();
+        setInterval(updateTime, 1000);
+        
+        // 获取地理位置
+        function getLocation() {
+            // 先显示正在申请访问
+            document.getElementById('location-display').textContent = "我们正在申请访问您的IP地址";
+            
+            // 2秒后显示无法访问
+            setTimeout(() => {
+                document.getElementById('location-display').textContent = "我们无法访问您的IP地址";
+                
+                // 再2秒后显示猜测位置
+                setTimeout(() => {
+                    document.getElementById('location-guess').textContent = "但我们猜测您的地址可能是";
+                    document.getElementById('location-display').textContent = "太阳系-地球";
+                }, 2000);
+            }, 2000);
+        }
+        
+        // 尝试获取位置
+        getLocation();
+        
+        // VCDI搜索引擎开关功能
+        const searchToggle = document.getElementById('vcdi-search-toggle');
+        const searchLabel = document.getElementById('search-label');
+        const searchBtn = document.getElementById('search-btn');
+        const searchTip = document.getElementById('search-tip');
+        
+        searchToggle.addEventListener('change', function() {
+            if (this.checked) {
+                // 启用VCDI搜索引擎
+                searchLabel.textContent = "请输入您需要搜索的内容或网址";
+                searchBtn.textContent = "搜索";
+                searchTip.textContent = "启用VCDI搜索引擎，输入内容将使用Bing搜索";
+            } else {
+                // 关闭VCDI搜索引擎
+                searchLabel.textContent = "请输入您需要导航的地点或路径";
+                searchBtn.textContent = "导航";
+                searchTip.textContent = "支持地点导航和网站访问，网站默认使用HTTPS安全协议";
+            }
+        });
+        
+        // 智能导航功能
+        document.getElementById('search-btn').addEventListener('click', performSearch);
+        document.getElementById('search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+        
+        function performSearch() {
+            const searchInput = document.getElementById('search-input').value.trim();
+            const errorElement = document.getElementById('search-error');
+            const isSearchEngineEnabled = document.getElementById('vcdi-search-toggle').checked;
+            
+            if (!searchInput) {
+                errorElement.textContent = "请输入搜索内容";
+                errorElement.style.display = 'block';
+                return;
+            }
+            
+            // 隐藏错误信息
+            errorElement.style.display = 'none';
+            
+            if (isSearchEngineEnabled) {
+                // VCDI搜索引擎模式：只能搜索，不能导航地点
+                if (isWebAddress(searchInput)) {
+                    // 如果是网址，直接导航
+                    navigateToWebsite(searchInput);
+                } else {
+                    // 否则使用Bing搜索
+                    const bingSearchUrl = `https://www.bing.com/search?q=${encodeURIComponent(searchInput)}`;
+                    window.open(bingSearchUrl, '_blank');
+                }
+            } else {
+                // 原模式：可以导航地点或网站
+                if (isWebAddress(searchInput)) {
+                    // 处理网站导航
+                    navigateToWebsite(searchInput);
+                } else {
+                    // 处理地点导航
+                    navigateToLocation(searchInput);
+                }
+            }
+        }
+        
+        function isWebAddress(input) {
+            // 检查是否包含常见的网站标识
+            const webPatterns = [
+                /^www\./i,
+                /\.(com|cn|net|org|edu|gov|io|info|biz|tv|cc|top|xyz|site|club|win|vip|mobi|name|pro|wang|tech|group|link|work|online|store|ren|kim|red|asia|love|one|website|space|press|news|social|band|market|software|fm)(\.[a-z]{2,})?$/i,
+                /^https?:\/\//i,
+                /^[a-z0-9-]+(\.[a-z0-9-]+)+(\/[a-z0-9-]*)*$/i
+            ];
+            
+            return webPatterns.some(pattern => pattern.test(input));
+        }
+        
+        function navigateToWebsite(address) {
+            let url = address;
+            
+            // 如果没有指定协议，默认使用HTTPS
+            if (!/^https?:\/\//i.test(url)) {
+                // 如果不是以www开头，添加https://
+                if (!/^www\./i.test(url)) {
+                    url = 'https://' + url;
+                } else {
+                    url = 'https://' + url;
+                }
+            }
+            
+            // 尝试打开网站
+            const newWindow = window.open(url, '_blank');
+            
+            // 如果无法打开（被广告拦截器等阻止），显示错误
+            setTimeout(() => {
+                if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+                    document.getElementById('search-error').textContent = "无法访问该网站，请检查网址是否正确";
+                    document.getElementById('search-error').style.display = 'block';
+                }
+            }, 500);
+        }
+        
+        function navigateToLocation(location) {
+            // 使用百度地图进行地点导航
+            const baiduMapUrl = `https://map.baidu.com/search?query=${encodeURIComponent(location)}&region=全国`;
+            window.open(baiduMapUrl, '_blank');
+        }
+        
+        // 网站数据
+        const allWebsites = [
+            // AI工具
+            { name: "DeepSeek", url: "https://www.deepseek.com", icon: "fas fa-brain", color: "#6A0DAD", category: "ai" },
+            { name: "Kimi", url: "https://kimi.moonshot.cn", icon: "fas fa-robot", color: "#FF6B6B", category: "ai" },
+            { name: "豆包", url: "https://www.doubao.com", icon: "fas fa-seedling", color: "#4CAF50", category: "ai" },
+            { name: "ChatGPT", url: "https://chat.openai.com", icon: "fas fa-comment-dots", color: "#10A37F", category: "ai" },
+            { name: "文心一言", url: "https://yiyan.baidu.com", icon: "fas fa-language", color: "#2932E1", category: "ai" },
+            { name: "通义千问", url: "https://tongyi.aliyun.com", icon: "fas fa-lightbulb", color: "#FF6A00", category: "ai" },
+            { name: "讯飞星火", url: "https://xinghuo.xfyun.cn", icon: "fas fa-fire", color: "#FF4400", category: "ai" },
+            { name: "智谱清言", url: "https://chatglm.cn", icon: "fas fa-atom", color: "#00BFA5", category: "ai" },
+            { name: "Claude", url: "https://claude.ai", icon: "fas fa-user-tie", color: "#FF6B6B", category: "ai" },
+            
+            // 视频平台
+            { name: "YouTube", url: "https://www.youtube.com", icon: "fab fa-youtube", color: "#FF0000", category: "video" },
+            { name: "Bilibili", url: "https://www.bilibili.com", icon: "fas fa-play-circle", color: "#FB7299", category: "video" },
+            { name: "抖音", url: "https://www.douyin.com", icon: "fas fa-music", color: "#69C9D0", category: "video" },
+            { name: "快手", url: "https://www.kuaishou.com", icon: "fas fa-video", color: "#FF6600", category: "video" },
+            { name: "Netflix", url: "https://www.netflix.com", icon: "fas fa-film", color: "#E50914", category: "video" },
+            { name: "Twitch", url: "https://www.twitch.tv", icon: "fab fa-twitch", color: "#9146FF", category: "video" },
+            { name: "爱奇艺", url: "https://www.iqiyi.com", icon: "fas fa-tv", color: "#00BE06", category: "video" },
+            { name: "腾讯视频", url: "https://v.qq.com", icon: "fas fa-play", color: "#3196FA", category: "video" },
+            { name: "优酷", url: "https://www.youku.com", icon: "fas fa-film", color: "#00A0E9", category: "video" },
+            
+            // 社交媒体
+            { name: "X (Twitter)", url: "https://twitter.com", icon: "fab fa-twitter", color: "#1DA1F2", category: "social" },
+            { name: "Pixiv", url: "https://www.pixiv.net", icon: "fas fa-palette", color: "#0096FA", category: "social" },
+            { name: "Fanbook", url: "https://fanbook.com", icon: "fas fa-users", color: "#7289DA", category: "social" },
+            { name: "Reddit", url: "https://www.reddit.com", icon: "fab fa-reddit", color: "#FF4500", category: "social" },
+            { name: "Instagram", url: "https://www.instagram.com", icon: "fab fa-instagram", color: "#E4405F", category: "social" },
+            { name: "Facebook", url: "https://www.facebook.com", icon: "fab fa-facebook", color: "#1877F2", category: "social" },
+            { name: "知乎", url: "https://www.zhihu.com", icon: "fab fa-zhihu", color: "#0084FF", category: "social" },
+            { name: "微博", url: "https://weibo.com", icon: "fab fa-weibo", color: "#E6162D", category: "social" },
+            { name: "豆瓣", url: "https://www.douban.com", icon: "fas fa-book", color: "#2E963D", category: "social" },
+            
+            // 网盘存储
+            { name: "123云盘", url: "https://www.123pan.com", icon: "fas fa-cloud", color: "#FF9800", category: "cloud" },
+            { name: "百度网盘", url: "https://pan.baidu.com", icon: "fas fa-cloud", color: "#2932E1", category: "cloud" },
+            { name: "阿里云盘", url: "https://www.aliyundrive.com", icon: "fas fa-cloud", color: "#1472FF", category: "cloud" },
+            { name: "腾讯微云", url: "https://www.weiyun.com", icon: "fas fa-cloud", color: "#3C8CFF", category: "cloud" },
+            { name: "Google Drive", url: "https://drive.google.com", icon: "fab fa-google-drive", color: "#34A853", category: "cloud" },
+            { name: "OneDrive", url: "https://onedrive.live.com", icon: "fas fa-cloud", color: "#0078D4", category: "cloud" },
+            { name: "Dropbox", url: "https://www.dropbox.com", icon: "fab fa-dropbox", color: "#0061FF", category: "cloud" },
+            { name: "Mega", url: "https://mega.nz", icon: "fas fa-cloud", color: "#D90007", category: "cloud" },
+            { name: "和彩云", url: "https://caiyun.feixin.10086.cn", icon: "fas fa-cloud", color: "#FF6A00", category: "cloud" },
+            
+            // 下载工具
+            { name: "SnapAny", url: "https://snapany.com", icon: "fas fa-download", color: "#4CAF50", category: "download" },
+            { name: "Internet Download Manager", url: "https://www.internetdownloadmanager.com", icon: "fas fa-download", color: "#FF9800", category: "download" },
+            { name: "qBittorrent", url: "https://www.qbittorrent.org", icon: "fas fa-magnet", color: "#1982C4", category: "download" },
+            { name: "迅雷", url: "https://www.xunlei.com", icon: "fas fa-bolt", color: "#FF6A00", category: "download" },
+            { name: "比特彗星", url: "https://www.bitcomet.com", icon: "fas fa-comet", color: "#9C27B0", category: "download" },
+            { name: "Free Download Manager", url: "https://www.freedownloadmanager.org", icon: "fas fa-download", color: "#2196F3", category: "download" },
+            
+            // 搜索引擎
+            { name: "Google", url: "https://www.google.com", icon: "fab fa-google", color: "#4285F4", category: "search" },
+            { name: "百度", url: "https://www.baidu.com", icon: "fas fa-paw", color: "#2932E1", category: "search" },
+            { name: "Bing", url: "https://www.bing.com", icon: "fab fa-microsoft", color: "#008373", category: "search" },
+            { name: "DuckDuckGo", url: "https://duckduuckgo.com", icon: "fas fa-duck", color: "#DE5833", category: "search" },
+            { name: "搜狗", url: "https://www.sogou.com", icon: "fas fa-search", color: "#FF6A00", category: "search" },
+            
+            // 实用工具
+            { name: "GitHub", url: "https://github.com", icon: "fab fa-github", color: "#333333", category: "tools" },
+            { name: "Canva", url: "https://www.canva.com", icon: "fas fa-paint-brush", color: "#00C4CC", category: "tools" },
+            { name: "Notion", url: "https://www.notion.so", icon: "fas fa-sticky-note", color: "#000000", category: "tools" },
+            { name: "ProcessOn", url: "https://www.processon.com", icon: "fas fa-sitemap", color: "#00A0E9", category: "tools" },
+            { name: "石墨文档", url: "https://shimo.im", icon: "fas fa-file-alt", color: "#00BFA5", category: "tools" },
+            { name: "腾讯文档", url: "https://docs.qq.com", icon: "fas fa-file-word", color: "#3C8CFF", category: "tools" },
+            { name: "WPS", url: "https://www.wps.cn", icon: "fas fa-file", color: "#00A0E9", category: "tools" },
+            
+            // 购物平台
+            { name: "淘宝", url: "https://www.taobao.com", icon: "fas fa-shopping-cart", color: "#FF4400", category: "shopping" },
+            { name: "京东", url: "https://www.jd.com", icon: "fas fa-shopping-bag", color: "#E31212", category: "shopping" },
+            { name: "拼多多", url: "https://www.pinduoduo.com", icon: "fas fa-shopping-basket", color: "#E02E24", category: "shopping" },
+            { name: "Amazon", url: "https://www.amazon.com", icon: "fab fa-amazon", color: "#FF9900", category: "shopping" },
+            { name: "天猫", url: "https://www.tmall.com", icon: "fas fa-cat", color: "#FF0036", category: "shopping" },
+            { name: "苏宁易购", url: "https://www.suning.com", icon: "fas fa-sun", color: "#FF6A00", category: "shopping" }
+        ];
+        
+        // 按首字母排序函数
+        function sortWebsites(websites) {
+            return websites.sort((a, b) => {
+                // 获取网站名称的首字符
+                const charA = a.name.charAt(0);
+                const charB = b.name.charAt(0);
+                
+                // 判断是否为数字
+                const isNumA = /[0-9]/.test(charA);
+                const isNumB = /[0-9]/.test(charB);
+                
+                // 数字优先
+                if (isNumA && !isNumB) return -1;
+                if (!isNumA && isNumB) return 1;
+                
+                // 都是数字或都是字母，按常规排序
+                return a.name.localeCompare(b.name, 'zh-CN');
+            });
+        }
+        
+        // 键盘导航相关变量
+        let currentSelectedIndex = -1;
+        let currentCards = [];
+        let isFilterEnabled = true;
+        
+        // 生成网站卡片
+        function generateWebsiteCards(websites, containerId, isDownload = false) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            // 按首字母排序
+            const sortedWebsites = sortWebsites(websites);
+            
+            // 保存当前卡片数组
+            currentCards = [];
+            
+            sortedWebsites.forEach((site, index) => {
+                const card = document.createElement('div');
+                card.className = 'website-card';
+                card.dataset.index = index;
+                
+                if (isDownload) {
+                    card.onclick = () => showDownloadDetail(site);
+                } else {
+                    card.onclick = () => window.open(site.url, '_blank');
+                }
+                
+                card.innerHTML = `
+                    <div class="website-icon" style="background: ${site.color}">
+                        <i class="${site.icon}"></i>
+                    </div>
+                    <div class="website-info">
+                        <div class="website-name">${site.name}</div>
+                        <div class="website-url">${site.url}</div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+                currentCards.push(card);
+            });
+            
+            // 重置选择索引
+            currentSelectedIndex = -1;
+            updateCardSelection();
+        }
+        
+        // 处理键盘事件
+        function handleKeydown(e) {
+            // 如果在下载详情页面，不处理键盘导航
+            if (document.getElementById('download-detail').style.display === 'block') {
+                return;
+            }
+            
+            // 如果当前没有卡片，不处理键盘导航
+            if (currentCards.length === 0) return;
+            
+            // 如果焦点在搜索框，不处理键盘导航
+            if (document.activeElement === document.getElementById('search-input')) {
+                return;
+            }
+            
+            switch(e.key) {
+                case 'ArrowUp':
+                    e.preventDefault();
+                    navigateCards(-1, 0);
+                    break;
+                case 'ArrowDown':
+                    e.preventDefault();
+                    navigateCards(1, 0);
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    navigateCards(0, -1);
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    navigateCards(0, 1);
+                    break;
+                case 'Enter':
+                    e.preventDefault();
+                    if (currentSelectedIndex >= 0 && currentSelectedIndex < currentCards.length) {
+                        currentCards[currentSelectedIndex].click();
+                    }
+                    break;
+            }
+        }
+        
+        // 导航卡片
+        function navigateCards(rowDirection, colDirection) {
+            if (currentCards.length === 0) return;
+            
+            // 如果当前没有选中任何卡片，从第一个开始
+            if (currentSelectedIndex === -1) {
+                currentSelectedIndex = 0;
+            } else {
+                // 计算网格列数
+                const gridComputedStyle = window.getComputedStyle(document.getElementById('websites-container'));
+                const gridColumnCount = gridComputedStyle.getPropertyValue('grid-template-columns').split(' ').length;
+                
+                // 计算新的索引
+                let newIndex = currentSelectedIndex;
+                
+                if (rowDirection !== 0) {
+                    // 上下导航
+                    newIndex = currentSelectedIndex + (rowDirection * gridColumnCount);
+                } else if (colDirection !== 0) {
+                    // 左右导航
+                    newIndex = currentSelectedIndex + colDirection;
+                }
+                
+                // 确保索引在有效范围内
+                if (newIndex < 0) {
+                    newIndex = 0;
+                } else if (newIndex >= currentCards.length) {
+                    newIndex = currentCards.length - 1;
+                }
+                
+                currentSelectedIndex = newIndex;
+            }
+            
+            updateCardSelection();
+            
+            // 滚动到选中的卡片
+            currentCards[currentSelectedIndex].scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest'
+            });
+        }
+        
+        // 更新卡片选择状态
+        function updateCardSelection() {
+            currentCards.forEach((card, index) => {
+                if (index === currentSelectedIndex) {
+                    card.classList.add('selected');
+                } else {
+                    card.classList.remove('selected');
+                }
+            });
+        }
+        
+        // 显示下载详情页
+        function showDownloadDetail(site) {
+            document.getElementById('downloads-container').style.display = 'none';
+            document.getElementById('download-detail').style.display = 'block';
+            
+            // 设置详情页内容
+            document.getElementById('detail-icon').innerHTML = `<i class="${site.icon}" style="color: ${site.color}"></i>`;
+            document.getElementById('detail-title').textContent = site.name;
+            
+            // 设置下载按钮
+            document.getElementById('windows-download').onclick = () => {
+                alert(`开始下载 ${site.name} 的 Windows 版本`);
+                // 实际应用中这里应该跳转到真实的下载链接
+            };
+            
+            document.getElementById('android-download').onclick = () => {
+                alert(`开始下载 ${site.name} 的 Android 版本`);
+                // 实际应用中这里应该跳转到真实的下载链接
+            };
+        }
+        
+        // 返回按钮功能
+        document.getElementById('back-btn').addEventListener('click', () => {
+            document.getElementById('download-detail').style.display = 'none';
+            document.getElementById('downloads-container').style.display = 'grid';
+        });
+        
+        // 选项卡切换功能
+        document.getElementById('websites-tab').addEventListener('click', () => {
+            document.getElementById('websites-tab').classList.add('active');
+            document.getElementById('downloads-tab').classList.remove('active');
+            document.getElementById('websites-section').style.display = 'block';
+            document.getElementById('downloads-section').style.display = 'none';
+            
+            // 重置键盘导航
+            currentSelectedIndex = -1;
+            generateWebsiteCards(allWebsites, 'websites-container');
+        });
+        
+        document.getElementById('downloads-tab').addEventListener('click', () => {
+            document.getElementById('downloads-tab').classList.add('active');
+            document.getElementById('websites-tab').classList.remove('active');
+            document.getElementById('websites-section').style.display = 'none';
+            document.getElementById('downloads-section').style.display = 'block';
+            
+            // 重置键盘导航
+            currentSelectedIndex = -1;
+            generateWebsiteCards(allWebsites, 'downloads-container', true);
+        });
+        
+        // 筛选器开关功能
+        document.getElementById('filter-toggle').addEventListener('click', () => {
+            const toggleBtn = document.getElementById('filter-toggle');
+            isFilterEnabled = !isFilterEnabled;
+            
+            if (isFilterEnabled) {
+                toggleBtn.textContent = '已开启筛选器';
+                toggleBtn.classList.add('active');
+            } else {
+                toggleBtn.textContent = '已关闭筛选器';
+                toggleBtn.classList.remove('active');
+                
+                // 清除所有筛选选项
+                const allCheckboxes = document.querySelectorAll('.filter-checkbox');
+                allCheckboxes.forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                
+                // 显示所有网站
+                generateWebsiteCards(allWebsites, 'websites-container');
+                generateWebsiteCards(allWebsites, 'downloads-container', true);
+            }
+        });
+        
+        // 筛选功能
+        function setupFilterHandlers(containerId, targetContainerId, isDownload = false) {
+            const checkboxes = document.querySelectorAll(`#${containerId} .filter-checkbox`);
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    if (!isFilterEnabled) {
+                        // 单选模式：取消其他所有复选框的选中状态
+                        checkboxes.forEach(cb => {
+                            if (cb !== checkbox) {
+                                cb.checked = false;
+                            }
+                        });
+                    }
+                    
+                    const selectedCategories = Array.from(checkboxes)
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.getAttribute('data-category'));
+                    
+                    let filteredWebsites;
+                    
+                    if (selectedCategories.length === 0) {
+                        filteredWebsites = allWebsites;
+                    } else {
+                        filteredWebsites = allWebsites.filter(site => 
+                            selectedCategories.includes(site.category)
+                        );
+                    }
+                    
+                    generateWebsiteCards(filteredWebsites, targetContainerId, isDownload);
+                });
+            });
+        }
+        
+        // 初始生成所有网站卡片
+        generateWebsiteCards(allWebsites, 'websites-container');
+        generateWebsiteCards(allWebsites, 'downloads-container', true);
+        
+        // 设置筛选器处理程序
+        setupFilterHandlers('websites-filters', 'websites-container');
+        setupFilterHandlers('downloads-filters', 'downloads-container', true);
+        
+        // 添加全局键盘事件监听
+        document.addEventListener('keydown', handleKeydown);
+    </script>
+</body>
+</html>
